@@ -1,0 +1,20 @@
+
+#pip install databricks-sql-connector
+
+
+from databricks import sql
+import os
+ 
+connection = sql.connect(
+                        server_hostname = "adb-5823466592220710.10.azuredatabricks.net",
+                        http_path = "/sql/1.0/warehouses/5985a5d0367ff01c",
+                        access_token = "dapi06b2b2bd6adc9b862479d14d6b4a08ea")
+ 
+cursor = connection.cursor()
+ 
+cursor.execute("SELECT booking_week AS xAxis, SUM(total_tix_weekly) AS yAxis FROM userdata_poc.poc_userdata.userdatastreamtable WHERE booking_year = 2023 AND booking_date >= '2023-02-28' AND
+       booking_date <= '2024-02-26' GROUP BY booking_week")
+print(cursor.fetchall())
+ 
+cursor.close()
+connection.close()
